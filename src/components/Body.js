@@ -8,6 +8,8 @@ const Body = () =>{
 
     const [listOfRestaurants, setListOfRestaurants] = useState([])
 //   console.log(apiData.map(data=>{data}))
+    const [searchText, setSearchText] = useState("")
+    const [filteredRestraunt, setFilteredRestraunt] = useState([])
 
 useEffect(()=>{ //  (call back function 1st arg) 2 arguments and once the component is
                 //rendered (this body component) is done this call back function
@@ -24,22 +26,39 @@ const fetchData = async () => {
     // console.log(json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants)
     setListOfRestaurants(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
     // .? is optional chaining
+    setFilteredRestraunt(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
 }
 
 return listOfRestaurants.length === 0 ? <Shimmer/> :(
     <div className="body">
     <div className="filter">
+
+    <div className="search">
+        <input type="text" className="search-box" value={searchText}
+            onChange={(e) =>{
+            setSearchText(e.target.value)
+        }}/>
+
+        <button onClick={()=>{
+           const filteredRes = listOfRestaurants.filter((res) => (
+           res.info.name.toLowerCase().includes(searchText.toLowerCase())
+           ))
+           setFilteredRestraunt(filteredRes)
+        }}>Search</button>
+
+    </div>
         <button className="filter-btn" onClick={()=>{
             const filteredList = listOfRestaurants.filter(
                 (res) => res.info.avgRating > 4
             );
-            setListOfRestaurants(filteredList)
+            setFilteredRestraunt(filteredList)
         }}>Top Rated Restaurant</button>
+
     </div>
     <div className="res-container">
         {/* <RestaurantCard resData = {apiData[0].info} /> */}
         {
-            listOfRestaurants.map((restraunt) =>{
+            filteredRestraunt.map((restraunt) =>{
                return <RestaurantCard key={restraunt.info.id} resData={restraunt.info} />
               })
         }
