@@ -2,6 +2,7 @@ import RestaurantCard from "./RestaurantCard";
 import { useEffect, useState } from "react";
 // import { resList } from "./utils/mockData";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router-dom";
 
 const Body = () =>{
     // const apiData = resList[0].card.card.gridElements.infoWithStyle.restaurants
@@ -59,7 +60,7 @@ return listOfRestaurants.length === 0 ? <Shimmer/> :(
         {/* <RestaurantCard resData = {apiData[0].info} /> */}
         {
             filteredRestraunt.map((restraunt) =>{
-               return <RestaurantCard key={restraunt.info.id} resData={restraunt.info} />
+               return <Link to = {"/restaurants/"+restraunt.info.id} key={restraunt.info.id}><RestaurantCard key={restraunt.info.id} resData={restraunt.info} /></Link>
               })
         }
     </div>
